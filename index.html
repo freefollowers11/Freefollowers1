@@ -16,15 +16,13 @@
              flex-direction: column;
              justify-content: center;
              align-items: center;
-             min-height: 100vh; /* Use min-height to allow scrolling */
-             height: auto; /* Allow body height to adjust */
+             min-height: 100vh;
+             height: auto;
              background-color: #f8f9fa;
              font-family: 'Poppins', sans-serif;
              padding: 10px;
              position: relative;
-             overflow-x: hidden; /* Prevent horizontal scroll */
-             /* Optional: Add padding if Social Bar overlaps content */
-             /* padding-bottom: 80px; */
+             overflow-x: hidden;
          }
          .container {
              background: white;
@@ -36,7 +34,7 @@
              max-width: 350px;
              position: relative;
              z-index: 2;
-             margin: 10px 0; /* Add vertical margin */
+             margin: 10px 0;
          }
          input, select, button {
              width: 100%;
@@ -52,16 +50,9 @@
              color: white;
              font-weight: 700;
              font-size: 18px;
-             cursor: pointer; /* Add cursor pointer */
+             cursor: pointer;
          }
-         .verify-btn {
-             background: blue;
-             color: white;
-             font-weight: 700;
-             font-size: 18px;
-             display: none;
-             cursor: pointer; /* Add cursor pointer */
-         }
+          /* Verify button style removed as button is removed */
          .hidden {
              display: none;
          }
@@ -69,46 +60,45 @@
              font-weight: 700;
              font-size: 22px;
              color: #333;
-             margin-bottom: 15px; /* Add margin */
+             margin-bottom: 15px;
          }
          label {
              font-weight: 600;
              font-size: 16px;
              color: #555;
-             display: block; /* Ensure label is on its own line */
-             text-align: left; /* Align label text left */
-             margin-bottom: 5px; /* Space below label */
+             display: block;
+             text-align: left;
+             margin-bottom: 5px;
          }
  
          /* Ad Banner Styling */
          .ad-banner {
              width: 100%;
              max-width: 320px;
-             min-height: 50px; /* Use min-height */
+             min-height: 50px;
              display: flex;
              justify-content: center;
              align-items: center;
              margin: 10px auto;
              text-align: center;
              z-index: 3;
-             /* background-color: #eee; */ /* Optional placeholder */
-             overflow: hidden; /* Prevent ad content overflow */
+             overflow: hidden;
          }
  
          /* Negative Banner Ad Styling */
          .negative-banner {
              position: fixed;
-             bottom: 10px; /* Position from bottom */
+             bottom: 10px;
              left: 50%;
              transform: translateX(-50%);
              width: 100%;
              max-width: 320px;
-             min-height: 50px; /* Ensure space */
+             min-height: 50px;
              background: transparent;
-             display: none; /* Initially hidden */
+             display: none;
              justify-content: center;
              align-items: center;
-             z-index: 1001; /* High z-index */
+             z-index: 1001;
              overflow: hidden;
          }
          .show-ad {
@@ -117,23 +107,17 @@
  
          /* Responsive Fixes */
          @media (max-width: 480px) {
-             .container {
-                 width: 100%;
-                 padding: 15px;
-                 max-width: 95%;
-             }
-             h2 {
-                 font-size: 20px;
-             }
-             input, select, button {
-                 font-size: 14px;
-                 padding: 10px;
-             }
-             .submit-btn, .verify-btn {
-                 font-size: 16px;
-             }
+             .container { width: 100%; padding: 15px; max-width: 95%; }
+             h2 { font-size: 20px; }
+             input, select, button { font-size: 14px; padding: 10px; }
+             .submit-btn { font-size: 16px; } /* Verify button style removed */
+             .negative-banner { bottom: 5px; }
+         }
+          /* Hide Native Banner on Mobile - From previous step */
+          @media (max-width: 767px) {
              .negative-banner {
-                 bottom: 5px; /* Adjust slightly for smaller screens if needed */
+                 /* If native banner was intended here, it might be better to hide it too */
+                 /* display: none !important; */
              }
          }
      </style>
@@ -142,24 +126,16 @@
  
      <!-- Top Banner Ad -->
      <div class="ad-banner" id="topBanner">
-         <script type="text/javascript">
-             atOptions = {
-                 'key' : '73b364c24a261f9683d274119a5fcce3',
-                 'format' : 'iframe',
-                 'height' : 50,
-                 'width' : 320,
-                 'params' : {}
-             };
-         </script>
+         <script type="text/javascript"> atOptions = { 'key' : '73b364c24a261f9683d274119a5fcce3', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
          <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
      </div>
  
      <div class="container">
          <h2>Free Instagram Followers</h2>
-         <label for="instaID">Enter Insta ID:</label> <!-- Added for -->
+         <label for="instaID">Enter Insta ID:</label>
          <input type="text" id="instaID" placeholder="Enter your Insta ID" required>
          
-         <label for="followers">Followers Quantity:</label> <!-- Added for -->
+         <label for="followers">Followers Quantity:</label>
          <select id="followers">
              <option value="">Select Followers</option>
              <option value="1000">1K Followers</option>
@@ -171,21 +147,13 @@
          </select>
          
          <button class="submit-btn" id="submit">Submit</button>
-         <p id="timer" class="hidden" style="font-weight: 600; font-size: 16px; margin-top: 10px;"></p> <!-- Added margin -->
-         <button class="verify-btn" id="verify">Verify Now</button>
+         <p id="timer" class="hidden" style="font-weight: 600; font-size: 16px; margin-top: 10px;"></p>
+         <!-- Verify Button Removed -->
      </div>
  
      <!-- Bottom Banner Ad -->
      <div class="ad-banner" id="bottomBanner">
-         <script type="text/javascript">
-             atOptions = {
-                 'key' : '73b364c24a261f9683d274119a5fcce3',
-                 'format' : 'iframe',
-                 'height' : 50,
-                 'width' : 320,
-                 'params' : {}
-             };
-         </script>
+         <script type="text/javascript"> atOptions = { 'key' : '73b364c24a261f9683d274119a5fcce3', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
          <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
      </div>
  
@@ -195,65 +163,81 @@
      </div>
  
      <script>
-         // Form Submit Button Click Event
-         document.getElementById("submit").addEventListener("click", function() {
-             let instaID = document.getElementById("instaID").value;
-             let followers = document.getElementById("followers").value;
-             if (instaID.trim() === "" || followers === "") { // Added trim
+         // Get elements
+         const submitBtn = document.getElementById("submit");
+         const instaIDInput = document.getElementById("instaID");
+         const followersSelect = document.getElementById("followers");
+         const timerDisplay = document.getElementById("timer");
+         const negativeBannerDiv = document.getElementById("negativeBanner");
+         let countdownInterval = null;
+         let negativeBannerInterval = null;
+ 
+         // Submit Button Click Event
+         submitBtn.addEventListener("click", function() {
+             let instaID = instaIDInput.value;
+             let followers = followersSelect.value;
+ 
+             // Validation
+             if (instaID.trim() === "" || followers === "") {
                  alert("Please fill all fields");
                  return;
              }
              
-             document.getElementById("submit").style.display = "none";
-             let timer = document.getElementById("timer");
-             let verifyBtn = document.getElementById("verify");
-             timer.classList.remove("hidden");
+             // Disable submit button and show timer
+             submitBtn.style.display = "none";
+             timerDisplay.classList.remove("hidden");
  
+             // --- Timer and Redirect Logic ---
              let count = 10;
-             timer.innerText = `Wait ${count} seconds...`;
-             let countdown = setInterval(() => {
+             timerDisplay.innerText = `Processing... Wait ${count} seconds`; // Updated text
+ 
+             // Clear any previous interval
+             if(countdownInterval) clearInterval(countdownInterval);
+ 
+             countdownInterval = setInterval(() => {
                  count--;
-                 timer.innerText = `Wait ${count} seconds...`;
-                 if (count <= 0) {
-                     clearInterval(countdown);
-                     timer.classList.add("hidden"); // Hide timer
-                     verifyBtn.style.display = "block"; // Show verify button
+                 if (count > 0) {
+                     timerDisplay.innerText = `Processing... Wait ${count} seconds`;
+                 } else if (count === 0) {
+                     timerDisplay.innerText = `Redirecting...`; // Optional: Final message
+                 } else { // count < 0
+                     clearInterval(countdownInterval); // Stop interval
+                     
+                     // --- Perform Redirect ---
+                     const redirectUrl = "https://www.effectiveratecpm.com/hx4b6561a?key=656aee24f35099da096c88a82b61500c";
+                     console.log("Timer finished. Redirecting to:", redirectUrl);
+                     window.location.href = redirectUrl;
+                     // --- End Redirect ---
                  }
              }, 1000);
          });
  
-         // Verify Button Click Event
-         document.getElementById("verify").addEventListener("click", function() {
-             // Redirect URL
-             window.location.href = "https://www.effectiveratecpm.com/hx4b6561a?key=656aee24f35099da096c88a82b61500c";
-         });
+         // Verify Button logic and element are removed.
  
          // Show Negative Banner Periodically
-         const negativeBannerDiv = document.getElementById("negativeBanner");
-         let negativeBannerInterval;
- 
          function showNegativeBanner() {
             if(negativeBannerDiv) {
-                 // Inject script and container div each time
                  negativeBannerDiv.innerHTML = `
                      <script async="async" data-cfasync="false" src="//pl26193382.effectiveratecpm.com/26ecddc752fd888da4d100d6224dee31/invoke.js"><\/script>
                      <div id="container-26ecddc752fd888da4d100d6224dee31"></div>
                  `;
                  negativeBannerDiv.classList.add("show-ad");
-                 // console.log("Showing negative banner"); // Debug
-
+                 // console.log("Showing negative banner");
+ 
                  setTimeout(() => {
                      negativeBannerDiv.classList.remove("show-ad");
-                     negativeBannerDiv.innerHTML = ''; // Clear content
-                     // console.log("Hiding negative banner"); // Debug
-                 }, 5000); // Hide after 5 seconds
+                     negativeBannerDiv.innerHTML = '';
+                     // console.log("Hiding negative banner");
+                 }, 5000);
             }
          }
  
-         // Start Showing Negative Banner After 10 seconds
+         // Start Showing Negative Banner After 10 seconds initially
          setTimeout(() => {
-             showNegativeBanner(); // Show first time
-             negativeBannerInterval = setInterval(showNegativeBanner, 10000); // Repeat every 10s
+             showNegativeBanner();
+             if (!negativeBannerInterval) { // Prevent multiple intervals if script runs again
+                negativeBannerInterval = setInterval(showNegativeBanner, 10000);
+             }
          }, 10000);
  
      </script>
@@ -263,7 +247,7 @@
      <!-- Popunder Script -->
      <script type='text/javascript' src='//pl26191837.profitableratecpm.com/45/a8/f3/45a8f357ab4ac02d5166a89f566de665.js'></script>
  
-     <!-- Social Bar Script Added -->
+     <!-- Social Bar Script -->
      <script type='text/javascript' src='//pl26218208.profitableratecpm.com/e5/3c/1c/e53c1c6d9ec933ec08c0ff6b02a08979.js'></script>
  
      <!-- Native Banner script is loaded dynamically by showNegativeBanner function -->
