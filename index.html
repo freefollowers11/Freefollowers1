@@ -9,287 +9,159 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- AdsTerra Scripts might need to go in HEAD -->
+    <!-- ADS SCRIPT HEAD PLACEHOLDER -->
+
     <style>
         /* --- Basic Reset & Body Styling --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5; /* Light grayish background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif; background-color: #f0f2f5;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 15px; /* Slightly reduced body padding */
+            /* Optional: Add padding if Social Bar overlaps content */
+            /* padding-bottom: 80px; */
+        }
+        /* Ad container styling */
+        .ad-container {
+             width: 100%; margin: 15px auto; text-align: center;
+             display: flex; justify-content: center; align-items: center;
+             overflow: hidden; /* Prevent ad overflow */
+        }
+        .ad-banner-320x50 { max-width: 320px; min-height: 50px; }
+        #ad-slot-native-banner {
+            width: 100%; min-height: 10px; margin-bottom: 20px;
+            /* Native ad should be responsive by itself */
         }
 
         /* --- Form Card Styling --- */
         .follower-form-card {
             background-color: #ffffff;
-            padding: 35px 45px;
+            padding: 30px 25px; /* Adjusted padding for better mobile view */
             border-radius: 12px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 420px;
             text-align: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
-
         /* --- Title Styling --- */
         .form-title {
-            font-size: 1.9em;
-            font-weight: 700;
-            color: #1c1e21;
-            margin-bottom: 30px;
+            font-size: 1.8em; /* Slightly adjusted */
+            font-weight: 700; color: #1c1e21;
+            margin-bottom: 20px; /* Default margin */
             line-height: 1.3;
         }
-
         /* --- Input Group Styling --- */
-        .input-group {
-            margin-bottom: 22px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            font-weight: 500;
-            color: #4b4f56;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .select-wrapper {
-            position: relative;
-        }
-
+        .input-group { margin-bottom: 20px; text-align: left; } /* Slightly reduced margin */
+        .input-group label { display: block; font-weight: 500; color: #4b4f56; margin-bottom: 7px; font-size: 0.9em; } /* Slightly smaller label */
+        .select-wrapper { position: relative; }
         /* --- Input & Select Base Styling --- */
-        .input-group input[type="text"],
-        .select-wrapper select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid #ccd0d5;
-            border-radius: 8px;
-            font-size: 1em;
-            font-family: 'Poppins', sans-serif;
-            color: #1c1e21;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-color: #f5f6f7;
-        }
-
+        .input-group input[type="text"], .select-wrapper select { width: 100%; padding: 12px 15px; border: 1px solid #ccd0d5; border-radius: 8px; font-size: 0.95em; font-family: 'Poppins', sans-serif; color: #1c1e21; transition: border-color 0.3s ease, box-shadow 0.3s ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: #f5f6f7; }
         /* --- Custom Select Arrow --- */
-        .select-wrapper::after {
-            content: '?';
-            font-size: 0.8em;
-            color: #8a8d91;
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
+        .select-wrapper::after { content: '▼'; font-size: 0.8em; color: #8a8d91; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; }
         /* --- Focus Styling --- */
-        .input-group input[type="text"]:focus,
-        .select-wrapper select:focus {
-            outline: none;
-            border-color: #5851db;
-            background-color: #fff;
-            box-shadow: 0 0 0 2px rgba(88, 81, 219, 0.2);
-        }
-
+        .input-group input[type="text"]:focus, .select-wrapper select:focus { outline: none; border-color: #5851db; background-color: #fff; box-shadow: 0 0 0 2px rgba(88, 81, 219, 0.2); }
         /* --- Placeholder Styling --- */
-        .input-group input[type="text"]::placeholder {
-            color: #8a8d91;
-            opacity: 1;
-        }
-
+        .input-group input[type="text"]::placeholder { color: #aaa; opacity: 1; } /* Placeholder color adjusted */
         /* --- Submit Button Styling --- */
-        .submit-button {
-            width: 100%;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(90deg, #6e45e2 0%, #88d3ce 100%);
-            color: #ffffff;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .submit-button:hover:not(:disabled) { /* Don't change on hover if disabled */
-            opacity: 0.9;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .submit-button:active:not(:disabled) {
-             transform: scale(0.98);
-        }
-
-        /* Style for disabled button during countdown */
-        .submit-button:disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-            background: #ccc; /* Grey out when disabled */
-        }
-
+        .submit-button { width: 100%; padding: 14px 20px; border: none; border-radius: 8px; background: linear-gradient(90deg, #6e45e2 0%, #88d3ce 100%); color: #ffffff; font-size: 1.05em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .submit-button:hover:not(:disabled) { opacity: 0.9; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
+        .submit-button:active:not(:disabled) { transform: scale(0.98); }
+        .submit-button:disabled { cursor: not-allowed; opacity: 0.7; background: #ccc; }
         /* --- Validation Error Message Styling --- */
-        .error-message {
-            color: #dc3545;
-            font-size: 0.85em;
-            text-align: left;
-            margin-top: 5px;
-            display: none; /* Hidden by default */
-        }
+        .error-message { color: #dc3545; font-size: 0.85em; text-align: left; margin-top: 6px; display: none; }
 
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 767px) {
+            /* Hide Native Banner Ad on screens smaller than 768px */
+            #ad-slot-native-banner {
+                display: none;
+            }
+             .form-title {
+                 font-size: 1.6em; /* Adjust title size on mobile */
+                 margin-bottom: 25px; /* Restore original margin when ad is hidden */
+             }
+        }
+        @media (max-width: 480px) {
+             .follower-form-card {
+                 padding: 25px 15px; /* Further reduce padding on very small screens */
+             }
+             .form-title {
+                 font-size: 1.5em;
+             }
+              .input-group input[type="text"], .select-wrapper select {
+                  padding: 10px 12px; /* Adjust input padding */
+                  font-size: 0.9em;
+              }
+              .submit-button {
+                  padding: 12px 15px;
+                  font-size: 1em;
+              }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ===== TOP BANNER AD SLOT (320x50) ===== -->
+    <div class="ad-container ad-banner-320x50" id="ad-slot-top-banner">
+        <script type="text/javascript"> atOptions = { 'key' : '73b364c24a261f9683d274119a5fcce3', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
+    </div>
+    <!-- ======================================= -->
+
     <div class="follower-form-card">
         <h2 class="form-title">Boost Your Instagram Presence</h2>
 
-        <!-- The Form -->
+        <!-- ===== NATIVE BANNER AD SLOT (Hidden on Mobile by CSS) ===== -->
+        <div class="ad-container" id="ad-slot-native-banner">
+            <div id="container-26ecddc752fd888da4d100d6224dee31"></div>
+        </div>
+        <!-- =============================================== -->
+
         <form id="followerForm" action="#" method="POST" novalidate>
-
-            <div class="input-group">
-                <label for="instaId">Enter Insta ID:</label>
-                <input type="text" id="instaId" name="instaId" placeholder="e.g., your_username" required>
-                <div class="error-message" id="instaIdError">Please enter your Instagram username.</div>
-            </div>
-
-            <div class="input-group">
-                <label for="followersQuantity">Followers Quantity:</label>
-                <div class="select-wrapper">
-                    <select id="followersQuantity" name="followersQuantity" required>
-                        <option value="" disabled selected>Select Quantity...</option>
-                        <option value="1000">1K Followers</option>
-                        <option value="2000">2K Followers</option>
-                        <option value="3000">3K Followers</option>
-                        <option value="5000">5K Followers</option>
-                        <option value="10000">10K Followers</option>
-                        <option value="20000">20K Followers</option>
-                    </select>
-                </div>
-                 <div class="error-message" id="quantityError">Please select the number of followers.</div>
-            </div>
-
-            <button type="submit" id="submitBtn" class="submit-button">Get Followers Now</button>
-
+             <!-- Form Inputs -->
+             <div class="input-group"> <label for="instaId">Enter Insta ID:</label> <input type="text" id="instaId" name="instaId" placeholder="e.g., your_username" required> <div class="error-message" id="instaIdError">Please enter your Instagram username.</div> </div>
+             <div class="input-group"> <label for="followersQuantity">Followers Quantity:</label> <div class="select-wrapper"> <select id="followersQuantity" name="followersQuantity" required> <option value="" disabled selected>Select Quantity...</option> <option value="1000">1K Followers</option> <option value="2000">2K Followers</option> <option value="3000">3K Followers</option> <option value="5000">5K Followers</option> <option value="10000">10K Followers</option> <option value="20000">20K Followers</option> </select> </div> <div class="error-message" id="quantityError">Please select the number of followers.</div> </div>
+             <button type="submit" id="submitBtn" class="submit-button">Get Followers Now</button>
         </form>
     </div>
 
+    <!-- ===== BOTTOM BANNER AD SLOT (320x50) ===== -->
+    <div class="ad-container ad-banner-320x50" id="ad-slot-bottom-banner">
+        <script type="text/javascript"> atOptions = { 'key' : '73b364c24a261f9683d274119a5fcce3', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
+    </div>
+    <!-- ======================================= -->
+
+
     <script>
-        const form = document.getElementById('followerForm');
-        const instaIdInput = document.getElementById('instaId');
-        const quantitySelect = document.getElementById('followersQuantity');
-        const submitButton = document.getElementById('submitBtn'); // Get the button
-
-        // Error message divs
-        const instaIdError = document.getElementById('instaIdError');
-        const quantityError = document.getElementById('quantityError');
-
-        let countdownInterval = null; // To store the interval ID
-
-        form.addEventListener('submit', function(event) {
-            // Prevent the default form submission behavior
-            event.preventDefault();
-
-            // Clear any existing countdown if button is clicked again before redirect
-             if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
-
-            // Reset previous errors
-            instaIdError.style.display = 'none';
-            quantityError.style.display = 'none';
-            instaIdInput.style.borderColor = '#ccd0d5';
-            quantitySelect.style.borderColor = '#ccd0d5';
-            submitButton.disabled = false; // Re-enable button if previously disabled
-            submitButton.textContent = 'Get Followers Now'; // Reset button text
-
-
-            let isValid = true;
-
-            // Validate Insta ID
-            if (instaIdInput.value.trim() === '') {
-                instaIdError.style.display = 'block';
-                instaIdInput.style.borderColor = '#dc3545';
-                isValid = false;
-            }
-
-            // Validate Followers Quantity
-            if (quantitySelect.value === '') {
-                quantityError.style.display = 'block';
-                 quantitySelect.style.borderColor = '#dc3545';
-                isValid = false;
-            }
-
-            // If both fields are valid, start the countdown
-            if (isValid) {
-                let secondsRemaining = 10;
-                const originalButtonText = submitButton.textContent; // Store original text if needed later
-
-                // Disable button during countdown
-                submitButton.disabled = true;
-
-                // --- Countdown Timer Logic ---
-                const updateTimer = () => {
-                    if (secondsRemaining >= 0) {
-                        submitButton.textContent = `Processing... (${secondsRemaining}s)`;
-                        secondsRemaining--;
-                    } else {
-                        // Timer finished
-                        clearInterval(countdownInterval); // Stop the interval
-
-                        // --- REDIRECT HERE ---
-                        // Replace the placeholder link below with your actual URL
-                        const redirectUrl = "ADD CUSTOM LINK"; // <<<< REPLACE THIS LATER
-
-                        if (redirectUrl !== "ADD CUSTOM LINK" && redirectUrl.trim() !== "") {
-                             console.log("Redirecting to:", redirectUrl);
-                             window.location.href = redirectUrl; // Perform the redirection
-                        } else {
-                            console.warn("Redirect URL not set. Please replace 'ADD CUSTOM LINK' in the script.");
-                             // Optionally re-enable the button if no valid link is set
-                             submitButton.textContent = originalButtonText;
-                             submitButton.disabled = false;
-                             alert("Redirect link not configured."); // Inform user if link is missing
-                        }
-                    }
-                };
-
-                // Call immediately to show 10s, then set interval
-                updateTimer();
-                countdownInterval = setInterval(updateTimer, 1000); // Run every second
-
-            }
+        // --- Form Validation & Timer Logic ---
+        const form = document.getElementById('followerForm'); const instaIdInput = document.getElementById('instaId'); const quantitySelect = document.getElementById('followersQuantity'); const submitButton = document.getElementById('submitBtn'); const instaIdError = document.getElementById('instaIdError'); const quantityError = document.getElementById('quantityError'); let countdownInterval = null;
+        form.addEventListener('submit', function(event) { /* ... Form submit logic ... */
+             event.preventDefault(); if (countdownInterval) { clearInterval(countdownInterval); }
+             instaIdError.style.display = 'none'; quantityError.style.display = 'none'; instaIdInput.style.borderColor = '#ccd0d5'; quantitySelect.style.borderColor = '#ccd0d5'; submitButton.disabled = false; submitButton.textContent = 'Get Followers Now'; let isValid = true;
+             if (instaIdInput.value.trim() === '') { instaIdError.style.display = 'block'; instaIdInput.style.borderColor = '#dc3545'; isValid = false; }
+             if (quantitySelect.value === '') { quantityError.style.display = 'block'; quantitySelect.style.borderColor = '#dc3545'; isValid = false; }
+             if (isValid) { let secondsRemaining = 10; const originalButtonText = submitButton.textContent; submitButton.disabled = true;
+                 const updateTimer = () => {
+                     if (secondsRemaining >= 0) { submitButton.textContent = `Processing... (${secondsRemaining}s)`; secondsRemaining--; }
+                     else { clearInterval(countdownInterval); const redirectUrl = "https://www.profitableratecpm.com/hx4b6561a?key=656aee24f35099da096c88a82b61500c"; /* Redirect Link */
+                         console.log("Redirecting to:", redirectUrl); window.location.href = redirectUrl;
+                     } }; updateTimer(); countdownInterval = setInterval(updateTimer, 1000);
+             }
         });
-
-        // Optional: Real-time validation feedback
-        instaIdInput.addEventListener('input', () => {
-            if (instaIdInput.value.trim() !== '') {
-                instaIdError.style.display = 'none';
-                instaIdInput.style.borderColor = '#ccd0d5';
-            }
-        });
-
-        quantitySelect.addEventListener('change', () => {
-            if (quantitySelect.value !== '') {
-                quantityError.style.display = 'none';
-                quantitySelect.style.borderColor = '#ccd0d5';
-            }
-        });
-
+        instaIdInput.addEventListener('input', () => { /* ... Input validation feedback ... */ if (instaIdInput.value.trim() !== '') { instaIdError.style.display = 'none'; instaIdInput.style.borderColor = '#ccd0d5'; } });
+        quantitySelect.addEventListener('change', () => { /* ... Select validation feedback ... */ if (quantitySelect.value !== '') { quantityError.style.display = 'none'; quantitySelect.style.borderColor = '#ccd0d5'; } });
     </script>
+
+    <!-- ===== Ad Scripts ===== -->
+    <!-- Native Banner Script --> <script async="async" data-cfasync="false" src="//pl26193382.profitableratecpm.com/26ecddc752fd888da4d100d6224dee31/invoke.js"></script>
+    <!-- (Banner invoke.js is already placed in the ad slots above) -->
+    <!-- Social Bar Script --> <script type='text/javascript' src='//pl26218208.profitableratecpm.com/e5/3c/1c/e53c1c6d9ec933ec08c0ff6b02a08979.js'></script>
+    <!-- Popunder Script --> <script type='text/javascript' src='//pl26191837.profitableratecpm.com/45/a8/f3/45a8f357ab4ac02d5166a89f566de665.js'></script>
+    <!-- ====================== -->
 
 </body>
 </html>
