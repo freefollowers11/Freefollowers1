@@ -23,6 +23,7 @@
              padding: 10px;
              position: relative;
              overflow-x: hidden;
+             padding-bottom: 140px; /* Space for fixed ads */
          }
          .container {
              background: white;
@@ -52,7 +53,6 @@
              font-size: 18px;
              cursor: pointer;
          }
-          /* Verify button style removed as button is removed */
          .hidden {
              display: none;
          }
@@ -71,7 +71,7 @@
              margin-bottom: 5px;
          }
  
-         /* Ad Banner Styling */
+         /* Ad Banner Styling (Top/Bottom) */
          .ad-banner {
              width: 100%;
              max-width: 320px;
@@ -85,41 +85,56 @@
              overflow: hidden;
          }
  
-         /* Negative Banner Ad Styling */
+         /* Negative/Native Banner Ad Styling */
          .negative-banner {
              position: fixed;
-             bottom: 10px;
+             bottom: 75px; /* Position adjusted */
              left: 50%;
              transform: translateX(-50%);
              width: 100%;
-             max-width: 320px;
+             max-width: 320px; /* Adapt width if needed */
              min-height: 50px;
              background: transparent;
-             display: none;
+             display: none; /* Start hidden */
              justify-content: center;
              align-items: center;
              z-index: 1001;
              overflow: hidden;
+             transition: opacity 0.3s ease, visibility 0.3s ease; /* Added visibility */
+             opacity: 0;
+             visibility: hidden; /* Start hidden */
          }
          .show-ad {
              display: flex !important;
+             opacity: 1 !important;
+             visibility: visible !important; /* Ensure it's visible */
          }
  
          /* Responsive Fixes */
          @media (max-width: 480px) {
-             .container { width: 100%; padding: 15px; max-width: 95%; }
-             h2 { font-size: 20px; }
-             input, select, button { font-size: 14px; padding: 10px; }
-             .submit-btn { font-size: 16px; } /* Verify button style removed */
-             .negative-banner { bottom: 5px; }
-         }
-          /* Hide Native Banner on Mobile - From previous step */
-          @media (max-width: 767px) {
+             body {
+                 padding-bottom: 150px;
+             }
+             .container {
+                 width: 100%;
+                 padding: 15px;
+                 max-width: 95%;
+             }
+             h2 {
+                 font-size: 20px;
+             }
+             input, select, button {
+                 font-size: 14px;
+                 padding: 10px;
+             }
+             .submit-btn {
+                 font-size: 16px;
+             }
              .negative-banner {
-                 /* If native banner was intended here, it might be better to hide it too */
-                 /* display: none !important; */
+                 bottom: 65px;
              }
          }
+         /* No longer hiding native banner on mobile */
      </style>
  </head>
  <body>
@@ -157,7 +172,7 @@
          <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
      </div>
  
-     <!-- Negative Banner Ad Container-->
+     <!-- Negative/Native Banner Ad Container-->
      <div class="negative-banner" id="negativeBanner">
           <!-- Content injected by JS -->
      </div>
@@ -171,74 +186,62 @@
          const negativeBannerDiv = document.getElementById("negativeBanner");
          let countdownInterval = null;
          let negativeBannerInterval = null;
+         let hideNegativeBannerTimeout = null;
  
          // Submit Button Click Event
          submitBtn.addEventListener("click", function() {
              let instaID = instaIDInput.value;
              let followers = followersSelect.value;
- 
-             // Validation
-             if (instaID.trim() === "" || followers === "") {
-                 alert("Please fill all fields");
-                 return;
-             }
+             if (instaID.trim() === "" || followers === "") { alert("Please fill all fields"); return; }
              
-             // Disable submit button and show timer
              submitBtn.style.display = "none";
              timerDisplay.classList.remove("hidden");
- 
-             // --- Timer and Redirect Logic ---
              let count = 10;
-             timerDisplay.innerText = `Processing... Wait ${count} seconds`; // Updated text
- 
-             // Clear any previous interval
+             timerDisplay.innerText = `Processing... Wait ${count} seconds`;
              if(countdownInterval) clearInterval(countdownInterval);
- 
              countdownInterval = setInterval(() => {
                  count--;
-                 if (count > 0) {
-                     timerDisplay.innerText = `Processing... Wait ${count} seconds`;
-                 } else if (count === 0) {
-                     timerDisplay.innerText = `Redirecting...`; // Optional: Final message
-                 } else { // count < 0
-                     clearInterval(countdownInterval); // Stop interval
-                     
-                     // --- Perform Redirect ---
+                 if (count > 0) { timerDisplay.innerText = `Processing... Wait ${count} seconds`; }
+                 else if (count === 0) { timerDisplay.innerText = `Redirecting...`; }
+                 else {
+                     clearInterval(countdownInterval);
                      const redirectUrl = "https://www.effectiveratecpm.com/hx4b6561a?key=656aee24f35099da096c88a82b61500c";
                      console.log("Timer finished. Redirecting to:", redirectUrl);
                      window.location.href = redirectUrl;
-                     // --- End Redirect ---
                  }
              }, 1000);
          });
  
-         // Verify Button logic and element are removed.
- 
          // Show Negative Banner Periodically
          function showNegativeBanner() {
             if(negativeBannerDiv) {
+                 if(hideNegativeBannerTimeout) clearTimeout(hideNegativeBannerTimeout); // Clear previous hide timeout
+
+                 // Inject the provided Native Banner code
                  negativeBannerDiv.innerHTML = `
-                     <script async="async" data-cfasync="false" src="//pl26193382.effectiveratecpm.com/26ecddc752fd888da4d100d6224dee31/invoke.js"><\/script>
+                     <script async="async" data-cfasync="false" src="//pl26193382.profitableratecpm.com/26ecddc752fd888da4d100d6224dee31/invoke.js"><\/script>
                      <div id="container-26ecddc752fd888da4d100d6224dee31"></div>
                  `;
                  negativeBannerDiv.classList.add("show-ad");
                  // console.log("Showing negative banner");
- 
-                 setTimeout(() => {
+
+                 // Hide after 5 seconds
+                 hideNegativeBannerTimeout = setTimeout(() => {
                      negativeBannerDiv.classList.remove("show-ad");
-                     negativeBannerDiv.innerHTML = '';
+                     // Optionally clear innerHTML. Test if ads reload better with this line uncommented.
+                     // negativeBannerDiv.innerHTML = '';
                      // console.log("Hiding negative banner");
-                 }, 5000);
+                 }, 5000); // Banner visible duration
             }
          }
  
-         // Start Showing Negative Banner After 10 seconds initially
+         // Start Showing Negative Banner After 5 seconds initially, then every 5 seconds
          setTimeout(() => {
-             showNegativeBanner();
-             if (!negativeBannerInterval) { // Prevent multiple intervals if script runs again
-                negativeBannerInterval = setInterval(showNegativeBanner, 10000);
+             showNegativeBanner(); // Show first time
+             if (!negativeBannerInterval) {
+                negativeBannerInterval = setInterval(showNegativeBanner, 5000); // Show every 5s
              }
-         }, 10000);
+         }, 5000); // Initial delay 5s
  
      </script>
  
