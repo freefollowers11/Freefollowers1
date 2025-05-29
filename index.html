@@ -244,13 +244,13 @@
         <div class="timer-modal-content">
             <h2>Please Wait!</h2>
             <p>Your free reward is almost ready.</p>
-            <span id="countdown-timer-display">10</span> <!-- UPDATED TO 10 -->
-            <p class="reward-text">Wait <span id="seconds-left-display">10</span> sec to get FREE ₹150</p> <!-- UPDATED TO 10 -->
+            <span id="countdown-timer-display">10</span>
+            <p class="reward-text">Wait <span id="seconds-left-display">10</span> sec to get FREE ₹150</p>
         </div>
     </div>
 
     <script>
-        let timeLeft = 10; // <<=== UPDATED TO 10 SECONDS
+        let timeLeft = 10; 
         const countdownDisplayElement = document.getElementById('countdown-timer-display');
         const secondsLeftTextElement = document.getElementById('seconds-left-display');
         const timerModalElement = document.getElementById('timerModal'); 
@@ -265,7 +265,8 @@
 
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                window.location.href = 'https://www.profitableratecpm.com/hx4b6561a?key=656aee24f35099da096c88a82b61500c'; // <<=== ADD YOUR CUSTOM LINK HERE
+                // Open link in a new tab
+                window.open('https://www.profitableratecpm.com/hx4b6561a?key=656aee24f35099da096c88a82b61500c', '_blank'); 
             }
         }, 1000);
     </script>
