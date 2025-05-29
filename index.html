@@ -3,645 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tips Editor - Editing Tutorials & Materials</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-
-    <!-- Firebase SDKs in HEAD -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
+    <title>Free Reward - Please Wait!</title>
     <style>
-        :root { /* Professional Look Palette */
-            --primary-orange: #FF7F00;
-            --primary-purple: #3C003C;
-            --accent-red: #FF3C3C;
-            --neutral-white: #FFFFFF;
-            --neutral-black: #0A0A0A;
-            
-            --bg-primary-light: #f7f9fc;
-            --bg-secondary-light: #FFFFFF;
-            --text-primary-light: #1c1e21;
-            --text-secondary-light: #555b66;
-            --border-light: #dfe3e8;
-            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.06);
-
-            --bg-primary-dark: #0d060d;
-            --bg-secondary-dark: #1a0c1a;
-            --text-primary-dark: #f0f2f5;
-            --text-secondary-dark: #a8b3cf;
-            --border-dark: #301e30;
-            --shadow-dark: 0 5px 20px rgba(0, 0, 0, 0.25);
-
-            --font-body: 'Inter', sans-serif;
-            --font-heading: 'Poppins', sans-serif;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --transition-main: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; font-size: 16px; }
-
         body {
-            font-family: var(--font-body); background-color: var(--bg-primary-light); 
-            color: var(--text-primary-light); line-height: 1.65;
-            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-            transition: background-color 0.3s ease, color 0.3s ease; margin:0; 
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a; /* Dark background, will be covered by ads */
+            overflow: hidden; /* Remove scrollbars, page full of ads */
         }
-        body.dark-theme { background-color: var(--bg-primary-dark); color: var(--text-primary-dark); }
-        .container { width: 100%; max-width: 1140px; margin-left: auto; margin-right: auto; padding: 0 20px; }
-        h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.3; margin-bottom: 0.8em; }
-        #user-website-container header h1 { font-size: 2rem; color: var(--primary-orange); margin:0; }
-        body.dark-theme #user-website-container header h1 { color: var(--primary-orange); } 
-        h2.section-title { font-size: 1.75rem; color: var(--primary-purple); text-align: center; margin-bottom: 1rem; margin-top: 2rem;} 
-        body.dark-theme h2.section-title { color: var(--primary-orange); }
-        .auth-form-wrapper h2, .dialogue-box h2, #post-detail-modal-content h3 { font-size: 1.6rem; color: var(--primary-purple); text-align:center; margin-bottom: 0.8rem; }
-        body.dark-theme .auth-form-wrapper h2, body.dark-theme .dialogue-box h2, body.dark-theme  #post-detail-modal-content h3 { color: var(--primary-orange); }
-        #post-detail-modal-content h3 { text-align:left; font-size: 1.5rem;} 
-        h3.post-title { font-size: 1.15rem; color: var(--primary-purple); margin-bottom: 0.6rem; font-weight: 600; }
-        body.dark-theme h3.post-title { color: var(--primary-orange); }
-        a { color: var(--primary-orange); text-decoration: none; transition: var(--transition-main); }
-        a:hover { color: var(--accent-red); }
-        button { 
-            font-family: var(--font-heading); font-weight: 600; font-size: 0.95rem;
-            padding: 10px 24px; border-radius: var(--radius-md); border: none;
-            cursor: pointer; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;
-            color: var(--neutral-white); background: linear-gradient(45deg, var(--primary-orange), var(--accent-red));
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08); transition: var(--transition-main);
-        }
-        button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 5px 12px rgba(0,0,0,0.12); }
-        button:disabled { background: #bdc3c7 !important; color: #7f8c8d !important; cursor: not-allowed; transform: none; box-shadow: none !important; }
-        input[type="email"], input[type="password"] { 
-            font-family: var(--font-body); font-size: 1rem; width: 100%;
-            padding: 12px 15px; margin-bottom: 1rem;
-            border: 1px solid var(--border-light); border-radius: var(--radius-md);
-            background-color: var(--bg-secondary-light); color: var(--text-primary-light); transition: var(--transition-main);
-        }
-        body.dark-theme input[type="email"], body.dark-theme input[type="password"] {
-            border-color: var(--border-dark); background-color: var(--bg-secondary-dark); color: var(--text-primary-dark);
-        }
-        input:focus { outline: none; border-color: var(--primary-orange); box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2); }
-        .hidden { display: none !important; } 
-        .visible-flex { display: flex !important; }
-        .text-center { text-align: center; }
-        .mt-1 { margin-top: 1rem; } .mb-2 { margin-bottom: 2rem; }
 
-        .app-loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: var(--bg-primary-light);
-            z-index: 9999; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center;
-            opacity: 1; visibility: visible; 
-            transition: opacity 0.3s ease, visibility 0.3s ease; 
+        .ad-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Responsive grid for ads */
+            gap: 5px; /* Little gap between ads */
+            padding: 5px;
+            box-sizing: border-box;
+            z-index: 1; /* Behind the modal */
+            overflow: auto; /* Allow scrolling within ad container if ads overflow */
         }
-        body.dark-theme .app-loader { background-color: var(--bg-primary-dark); }
-        .app-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .spinner { width: 45px; height: 45px; border-radius: 50%; border: 5px solid var(--border-light); border-top-color: var(--primary-orange); animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
-        body.dark-theme .spinner { border-color: var(--border-dark); border-top-color: var(--primary-orange); }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .app-loader p { font-size: 1rem; color: var(--text-secondary-light); }
-        body.dark-theme .app-loader p { color: var(--text-secondary-dark); }
 
-        #lock-dialogue-container, #auth-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            display: none; 
-            flex-direction: column; justify-content: center; align-items: center; 
-            padding: 20px; z-index: 9990; 
-            background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
-            opacity: 0; transition: opacity 0.3s ease;
+        .ad-slot {
+            background-color: #333; /* Placeholder background */
+            border: 1px dashed #555;
+            color: #888;
+            font-size: 12px;
+            min-height: 250px; /* Default ad height for generic slots */
+            overflow: hidden; /* Prevent ad content from overflowing slot */
         }
-        #lock-dialogue-container.visible-flex, #auth-container.visible-flex { opacity: 1; }
 
-        .dialogue-box, .auth-form-wrapper { 
-            background-color: var(--bg-secondary-light); padding: 30px;
-            border-radius: var(--radius-lg); box-shadow: var(--shadow-light);
-            max-width: 420px; width: calc(100% - 40px); text-align: center;
-            opacity:0; transform: scale(0.95); animation: popInProfessional 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s forwards;
+        .ad-slot.banner-320x50 {
+            min-height: 50px;
+            max-height: 50px;
+            width: 320px; /* Fixed width for this ad type */
+            margin: 0 auto; /* Center if grid column is larger */
         }
-        body.dark-theme .dialogue-box, body.dark-theme .auth-form-wrapper { background-color: var(--bg-secondary-dark); box-shadow: var(--shadow-dark); }
-        @keyframes popInProfessional { to { opacity:1; transform: scale(1); } }
-        .dialogue-box p, .auth-form-wrapper p { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6; color: var(--text-secondary-light); }
-        body.dark-theme .dialogue-box p, body.dark-theme .auth-form-wrapper p { color: var(--text-secondary-dark); }
-        .dialogue-box button { width: auto; min-width: 140px; }
-        .auth-form-wrapper form button { width: 100%; margin-top: 0.8rem; }
-        .auth-form-wrapper p.toggle-auth { font-size: 0.85rem; margin-top: 1.5rem; }
-        .auth-form-wrapper p.toggle-auth a { font-weight: 600; }
-
-        #user-website-container {
-            display: none; 
-            flex-direction: column; min-height: 100vh; 
-            opacity: 0; animation: fadeInSiteProfessional 0.4s ease-out forwards;
-        }
-        #user-website-container.visible { display: flex; opacity: 1;}
         
-        #user-website-container header {
-            background-color: var(--bg-secondary-light); padding: 12px 0;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.07); position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid var(--border-light);
+        .ad-slot.native-banner {
+            min-height: 150px; /* Native banners can vary in height */
+            width: 100%; /* Allow native banner to take full width of its grid cell */
         }
-        body.dark-theme #user-website-container header { background-color: var(--bg-secondary-dark); border-bottom-color: var(--border-dark); box-shadow: 0 1px 8px rgba(0,0,0,0.2); }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-        .user-info #user-email-display { font-size: 0.85rem; color: var(--text-secondary-light); font-weight: 500; min-height: 1em; }
-        body.dark-theme .user-info #user-email-display { color: var(--text-secondary-dark); }
-        .user-info button { padding: 8px 16px; font-size: 0.8rem; }
-        #theme-toggle-button {
-            background: transparent; color: var(--text-primary-light); border: 1.5px solid var(--text-primary-light);
-            width: 36px; height: 36px; font-size: 1.1rem; box-shadow:none; padding:0; display:flex; align-items:center; justify-content:center;
-        }
-        body.dark-theme #theme-toggle-button { color: var(--text-primary-dark); border-color: var(--text-primary-dark); }
-        #theme-toggle-button:hover { background-color: rgba(0,0,0,0.05); transform: translateY(-2px) rotate(10deg); }
-        body.dark-theme #theme-toggle-button:hover { background-color: rgba(255,255,255,0.05); }
-        #logout-button { background: linear-gradient(45deg, var(--accent-red), #c0392b); }
 
-        #user-website-container main { padding: 30px 0 50px 0; flex-grow: 1; }
-        #user-website-container main .section-subtitle { font-size: 1rem; max-width: 600px; margin: 0 auto 30px auto; color: var(--text-secondary-light); text-align: center; }
-        body.dark-theme #user-website-container main .section-subtitle { color: var(--text-secondary-dark); }
-        
-        #posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .post-card {
-            background-color: var(--bg-secondary-light); border-radius: var(--radius-md);
-            border: 1px solid var(--border-light); box-shadow: var(--shadow-light);
-            transition: var(--transition-main); display: flex; flex-direction: column;
-            opacity: 0; transform: translateY(25px); animation: fadeInCardUser 0.4s ease-out forwards;
-            cursor: pointer; 
+        /* Timer Modal Styles */
+        .timer-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* On top of everything */
+            padding: 10px; /* Padding for small screens */
+            box-sizing: border-box;
         }
-        @keyframes fadeInCardUser { to { opacity: 1; transform: translateY(0); } }
-        .post-card:nth-child(odd) { animation-delay: 0.05s; } .post-card:nth-child(even) { animation-delay: 0.1s; }
-        body.dark-theme .post-card { background-color: var(--bg-secondary-dark); border-color: var(--border-dark); box-shadow: var(--shadow-dark); }
-        .post-card:hover { transform: translateY(-6px); box-shadow: 0 8px 22px rgba(0,0,0,0.09); }
-        body.dark-theme .post-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.35); }
-        .post-thumbnail-wrapper { border-top-left-radius: var(--radius-md); border-top-right-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16 / 9.5; }
-        .post-thumbnail { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
-        .post-card:hover .post-thumbnail { transform: scale(1.05); }
-        .post-content { padding: 18px 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .post-description { font-size: 0.9rem; color: var(--text-secondary-light); margin-bottom: 15px; flex-grow: 1; line-height: 1.55; }
-        body.dark-theme .post-description { color: var(--text-secondary-dark); }
-        .post-card .download-button.view-details-btn { margin-top: auto; width: 100%; font-size: 0.85rem; padding: 10px; }
-        .no-posts { grid-column: 1 / -1; text-align: center; font-size: 1.05rem; padding: 35px; color: var(--text-secondary-light); }
-        body.dark-theme .no-posts { color: var(--text-secondary-dark); }
 
-        #user-website-container footer { text-align: center; padding: 20px 0; margin-top: 30px; border-top: 1px solid var(--border-light); font-size: 0.85rem; color: var(--text-secondary-light); }
-        body.dark-theme #user-website-container footer { border-top-color: var(--border-dark); color: var(--text-secondary-dark); }
-        
-        #generic-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            display: none; justify-content: center; align-items: center; 
-            background-color: rgba(0,0,0,0.65); backdrop-filter: blur(5px); 
-            z-index: 10001; opacity:0; transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: scale(0.95); 
+        .timer-modal-content {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Engaging gradient */
+            color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: popIn 0.5s ease-out, pulseModal 1.5s infinite 0.5s;
+            max-width: 90vw; /* Ensure modal doesn't get too wide on mobile */
+            width: auto; /* Adjust to content */
+            box-sizing: border-box;
         }
-        #generic-modal.visible { display: flex; opacity:1; transform: scale(1); }
-        
-        #post-detail-modal-content { 
-            background-color: var(--bg-secondary-light); padding: 25px;
-            border-radius: var(--radius-lg); box-shadow: var(--shadow-light);
-            max-width: 600px; width: calc(100% - 40px); text-align:left; 
-            max-height: 85vh; overflow-y: auto; 
-        }
-        body.dark-theme #post-detail-modal-content { background-color: var(--bg-secondary-dark); box-shadow: var(--shadow-dark); }
-        
-        #post-detail-modal-content .modal-header { display:flex; justify-content: space-between; align-items:center; margin-bottom: 15px;}
-        #post-detail-title { font-size: 1.5rem; margin-bottom:0; } /* Already styled by .content-box h2 */
-        #post-detail-modal-content .close-button { font-size: 1.8rem; cursor: pointer; background:none; border:none; color: var(--text-secondary-light); padding:5px; line-height:1;}
-        body.dark-theme #post-detail-modal-content .close-button {color: var(--text-secondary-dark);}
-        #post-detail-modal-content .close-button:hover {color: var(--accent-red);}
-        #post-detail-thumbnail {
-            width: 100%; height: auto; max-height: 350px; 
-            object-fit: contain; border-radius: var(--radius-md); margin-bottom: 20px;
-        }
-        #post-detail-description {
-            font-size: 1rem; line-height: 1.7; margin-bottom: 25px;
-            color: var(--text-secondary-light);
-        }
-        body.dark-theme #post-detail-description { color: var(--text-secondary-dark); }
-        #post-detail-download-link { display: block; width: 100%; text-align: center; margin-top: 10px; }
 
-        /* --- RESPONSIVE DESIGN --- */
-        @media (max-width: 992px) { 
-            .container { max-width: 960px; padding-left: 15px; padding-right: 15px; }
-            #posts-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
-            h2.section-title { font-size: 1.6rem; }
-            .post-card .download-button, .auth-form-wrapper form button, .dialogue-box button  { font-size: 0.9rem; padding: 10px 20px; }
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
         }
-        @media (max-width: 768px) { 
-            #user-website-container header .container { flex-direction: column; gap: 10px; padding-top: 10px; padding-bottom: 10px; }
-            #user-website-container header h1 { font-size: 1.8rem; text-align: center; width: 100%; }
-            .user-info { width: 100%; justify-content: space-around; gap: 10px; }
-            .user-info #user-email-display { font-size: 0.8rem; margin-right: 0; }
-            .user-info button { padding: 7px 14px; font-size: 0.75rem; }
-            #theme-toggle-button { width: 32px; height: 32px; font-size: 1rem; }
-            #posts-grid { grid-template-columns: 1fr; gap: 20px; }
-            .post-card:hover { transform: translateY(-4px); }
-            .post-thumbnail-wrapper { aspect-ratio: 16 / 10; }
-            h3.post-title { font-size: 1.1rem; }
-            .post-description { font-size: 0.85rem; margin-bottom: 12px; }
-            .post-card .download-button.view-details-btn { font-size: 0.8rem; padding: 10px; } /* Adjusted for view details button */
-            .auth-form-wrapper, .dialogue-box, #post-detail-modal-content {
-                padding: 25px; margin-left: 10px; margin-right: 10px; width: calc(100% - 20px); 
+        
+        @keyframes pulseModal {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .timer-modal-content h2 {
+            margin-top: 0;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .timer-modal-content p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        #countdown-timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            display: block;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .reward-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* Media Query for smaller screens (e.g., smartphones) */
+        @media (max-width: 480px) {
+            .timer-modal-content {
+                padding: 20px; /* Reduce padding for smaller modals */
             }
-            .auth-form-wrapper h2, .dialogue-box h2, #post-detail-modal-content #post-detail-title { font-size: 1.4rem; }
-            .auth-form-wrapper p, .dialogue-box p, #post-detail-description { font-size: 0.9rem; }
-            input[type="email"], input[type="password"] { padding: 10px 12px; font-size: 0.9rem; }
-            .auth-form-wrapper form button, .dialogue-box button { padding: 12px; font-size: 0.9rem; }
-            #main-content-area .section-title { font-size: 1.5rem;}
-            #main-content-area .section-subtitle { font-size: 0.95rem; padding: 0 10px; }
+            .timer-modal-content h2 {
+                font-size: 22px; /* Adjust font size */
+            }
+            .timer-modal-content p {
+                font-size: 15px; /* Adjust font size */
+                margin-bottom: 15px;
+            }
+            #countdown-timer-display {
+                font-size: 38px; /* Adjust font size */
+                margin-bottom: 15px;
+            }
+            .reward-text {
+                font-size: 18px; /* Adjust font size */
+                padding: 6px 10px;
+            }
         }
-        @media (max-width: 480px) { 
-            body { font-size: 15px; } 
-            #user-website-container header h1 { font-size: 1.6rem; }
-            .user-info { flex-wrap: wrap; justify-content: center; } 
-            .user-info button { padding: 6px 12px; font-size: 0.7rem; }
-            #theme-toggle-button { width: 30px; height: 30px; font-size: 0.9rem; }
-            .post-card { margin-bottom: 15px; } 
-            .post-thumbnail-wrapper { aspect-ratio: 16 / 10; } 
-            .post-content { padding: 15px; } 
-            h3.post-title { font-size: 1rem; }
-            .post-description { font-size: 0.8rem; }
-            .post-card .download-button.view-details-btn { font-size: 0.75rem; }
-            .auth-form-wrapper, .dialogue-box, #post-detail-modal-content { padding: 20px; }
-            .auth-form-wrapper h2, .dialogue-box h2, #post-detail-modal-content #post-detail-title { font-size: 1.3rem; }
-            .auth-form-wrapper p, .dialogue-box p, #post-detail-description { font-size: 0.85rem; }
-            #main-content-area .section-title { font-size: 1.4rem;}
-            #main-content-area .section-subtitle { font-size: 0.9rem; }
-            #user-website-container footer { font-size: 0.75rem; padding: 15px 0; }
+        @media (max-width: 359px) { /* Even smaller screens */
+             .timer-modal-content h2 {
+                font-size: 20px; 
+            }
+            .timer-modal-content p {
+                font-size: 14px; 
+            }
+            #countdown-timer-display {
+                font-size: 32px; 
+            }
+            .reward-text {
+                font-size: 16px; 
+            }
         }
 
     </style>
+    
+    <!-- ADSTERRA POPUNDER CODE -->
+    <script type='text/javascript' src='//pl26191837.profitableratecpm.com/45/a8/f3/45a8f357ab4ac02d5166a89f566de665.js'></script>
 
-    <script>
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyCVtN_MS58HS77s7TzWr8hzvg_UJpwQimA",
-            authDomain: "tips-editor-5cb81.firebaseapp.com",
-            databaseURL: "https://tips-editor-5cb81-default-rtdb.firebaseio.com",
-            projectId: "tips-editor-5cb81",
-            storageBucket: "tips-editor-5cb81.firebasestorage.app",
-            messagingSenderId: "347055735425",
-            appId: "1:347055735425:web:b60dd7be74851f64fe8380",
-            measurementId: "G-4VBMJ50GJ8"
-        };
-        let firebaseAppInstance;
-        try {
-            firebaseAppInstance = firebase.initializeApp(firebaseConfig);
-        } catch (e) { 
-            console.error("CRITICAL: Firebase Initialization Failed!", e);
-            document.addEventListener('DOMContentLoaded', () => {
-                 const body = document.body;
-                 if(body) body.innerHTML = '<div style="padding:30px;text-align:center;font-family:Arial,sans-serif;color:#333;"><h1>Initialization Error</h1><p>Failed to connect. Please try again later.</p></div>';
-            });
-        }
-    </script>
+    <!-- ADSTERRA SOCIAL BAR CODE -->
+    <script type='text/javascript' src='//pl26218208.profitableratecpm.com/e5/3c/1c/e53c1c6d9ec933ec08c0ff6b02a08979.js'></script>
+
 </head>
-<body class="light-theme">
+<body>
 
-    <div id="app-loader" class="app-loader"> 
-        <div class="spinner"></div>
-        <p>Loading Tips Editor...</p>
-    </div>
-
-    <div id="lock-dialogue-container" class="hidden"></div> 
-    <div id="auth-container" class="hidden">
-        <div class="auth-form-wrapper"> 
-            <div id="user-login-form"></div>
-            <div id="user-signup-form" class="hidden"></div>
+    <div class="ad-background-container">
+        
+        <div class="ad-slot banner-320x50">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '73b364c24a261f9683d274119a5fcce3',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
         </div>
-    </div> 
-    
-    <div id="user-website-container" class="hidden"> 
-        <header>
-            <div class="container">
-                <h1>Tips Editor</h1>
-                <div class="user-info">
-                    <span id="user-email-display"></span> 
-                    <button id="theme-toggle-button" title="Toggle Theme">??</button>
-                    <button id="logout-button">Logout</button>
-                </div>
-            </div>
-        </header>
-        <main class="container">
-             <h2 class="section-title">Our Editing Materials</h2>
-            <p class="section-subtitle text-center">
-                Dive into our collection of exclusive editing materials and tutorials to elevate your video editing skills.
-            </p>
-            <div id="posts-grid"></div>
-        </main>
-        <footer> 
-            <p>© <span id="currentYear"></span> Tips Editor. All Rights Reserved.</p>
-        </footer>
+
+        <div class="ad-slot native-banner">
+            <script async="async" data-cfasync="false" src="//pl26193382.profitableratecpm.com/26ecddc752fd888da4d100d6224dee31/invoke.js"></script>
+            <div id="container-26ecddc752fd888da4d100d6224dee31"></div>
+        </div>
+
+        <div class="ad-slot">
+            Ad Slot (Generic Banner - You can put another 320x50 or different size)
+        </div>
+        <div class="ad-slot">
+            Ad Slot (Generic Banner)
+        </div>
+
+        <div class="ad-slot banner-320x50">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '73b364c24a261f9683d274119a5fcce3', 
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
+        </div>
+
+        <div class="ad-slot native-banner">
+             Ad Slot (Native Banner - Add new native ad code if available, or another type)
+        </div>
+         <div class="ad-slot">
+            Ad Slot (Generic Banner)
+        </div>
+        <div class="ad-slot">
+            Ad Slot (Generic Banner)
+        </div>
+
+        <div class="ad-slot banner-320x50">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '73b364c24a261f9683d274119a5fcce3', 
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/73b364c24a261f9683d274119a5fcce3/invoke.js"></script>
+        </div>
+
+        <div class="ad-slot native-banner">
+            Ad Slot (Native Banner - Add new native ad code if available, or another type)
+        </div>
+         <div class="ad-slot">
+            Ad Slot (Generic Banner)
+        </div>
+        <div class="ad-slot">
+            Ad Slot (Generic Banner)
+        </div>
     </div>
-    
-    <div id="generic-modal" class="hidden"> 
-        <div id="post-detail-modal-content"> 
-            <div class="modal-header">
-                <h3 id="post-detail-title">Post Title</h3>
-                <span class="close-button" onclick="hideModal()">×</span>
-            </div>
-            <img id="post-detail-thumbnail" src="" alt="Post Thumbnail" style="display:none;">
-            <p id="post-detail-description" class="description-full">Full post description here...</p>
-            <a href="#" id="post-detail-download-link" class="download-button download-button-modal" target="_blank" download>Download Materials</a>
+
+    <div class="timer-modal-overlay" id="timerModal">
+        <div class="timer-modal-content">
+            <h2>Please Wait!</h2>
+            <p>Your free reward is almost ready.</p>
+            <span id="countdown-timer-display">10</span> <!-- UPDATED TO 10 -->
+            <p class="reward-text">Wait <span id="seconds-left-display">10</span> sec to get FREE ₹150</p> <!-- UPDATED TO 10 -->
         </div>
     </div>
 
     <script>
-        // Main application script
-        if (!firebaseAppInstance) {
-            console.error("Firebase App not ready. Main script will not run.");
-        } else {
-            const auth = firebase.auth();
-            const db = firebase.database();
+        let timeLeft = 10; // <<=== UPDATED TO 10 SECONDS
+        const countdownDisplayElement = document.getElementById('countdown-timer-display');
+        const secondsLeftTextElement = document.getElementById('seconds-left-display');
+        const timerModalElement = document.getElementById('timerModal'); 
 
-            let currentUser = null;
-            let dialogueAccepted = sessionStorage.getItem('tipsEditorDialogueAccepted') === 'true';
+        secondsLeftTextElement.textContent = timeLeft;
+        countdownDisplayElement.textContent = timeLeft;
 
-            // DOM Elements
-            let appLoaderEl, lockDialogueContainerEl, authContainerEl, userLoginFormComponentEl, userSignupFormComponentEl,
-                userWebsiteContainerEl, postsGridEl, userEmailDisplayEl, logoutButtonEl, 
-                themeToggleButtonEl, 
-                postDetailModalEl, postDetailTitleEl, postDetailThumbnailEl, postDetailDescriptionEl, postDetailDownloadLinkEl;
-                
-            function initDOMElements() {
-                appLoaderEl = document.getElementById('app-loader');
-                lockDialogueContainerEl = document.getElementById('lock-dialogue-container');
-                authContainerEl = document.getElementById('auth-container');
-                userLoginFormComponentEl = document.getElementById('user-login-form'); 
-                userSignupFormComponentEl = document.getElementById('user-signup-form'); 
-                userWebsiteContainerEl = document.getElementById('user-website-container');
-                postsGridEl = document.getElementById('posts-grid');
-                userEmailDisplayEl = document.getElementById('user-email-display');
-                logoutButtonEl = document.getElementById('logout-button');
-                themeToggleButtonEl = document.getElementById('theme-toggle-button');
-                postDetailModalEl = document.getElementById('generic-modal'); 
-                postDetailTitleEl = document.getElementById('post-detail-title'); 
-                postDetailThumbnailEl = document.getElementById('post-detail-thumbnail');
-                postDetailDescriptionEl = document.getElementById('post-detail-description');
-                postDetailDownloadLinkEl = document.getElementById('post-detail-download-link');
-                if(document.getElementById('currentYear')) document.getElementById('currentYear').textContent = new Date().getFullYear();
-            }
-            
-            function showModal() { 
-                if (postDetailModalEl) {
-                    postDetailModalEl.classList.remove('hidden');
-                    postDetailModalEl.classList.add('visible');
-                }
-            }
-            function hideModal() {
-                if (postDetailModalEl) {
-                    postDetailModalEl.classList.remove('visible');
-                    postDetailModalEl.classList.add('hidden');
-                }
-            }
-            
-            function toggleTheme() {
-                const body = document.body;
-                body.classList.toggle('dark-theme');
-                if (body.classList.contains('dark-theme')) {
-                    body.classList.remove('light-theme');
-                    localStorage.setItem('theme', 'dark');
-                    if(themeToggleButtonEl) themeToggleButtonEl.innerHTML = '??';
-                } else {
-                    body.classList.add('light-theme'); // Ensure light-theme is present
-                    localStorage.setItem('theme', 'light');
-                    if(themeToggleButtonEl) themeToggleButtonEl.innerHTML = '??';
-                }
-            }
+        const timerInterval = setInterval(() => { 
+            timeLeft--;
+            countdownDisplayElement.textContent = timeLeft;
+            secondsLeftTextElement.textContent = timeLeft; 
 
-            function applySavedTheme() {
-                const savedTheme = localStorage.getItem('theme');
-                const body = document.body;
-                if (savedTheme === 'dark') {
-                    body.classList.remove('light-theme'); 
-                    body.classList.add('dark-theme');
-                    if(themeToggleButtonEl) themeToggleButtonEl.innerHTML = '??';
-                } else { 
-                    body.classList.remove('dark-theme'); 
-                    body.classList.add('light-theme');
-                    if(themeToggleButtonEl) themeToggleButtonEl.innerHTML = '??';
-                }
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                window.location.href = 'ADD YOUR CUSTOM LINK HERE'; // <<=== ADD YOUR CUSTOM LINK HERE
             }
-            
-            function manageContentVisibility(targetContainerId) {
-                const containers = [appLoaderEl, authContainerEl, lockDialogueContainerEl, userWebsiteContainerEl];
-                containers.forEach(container => {
-                    if (container) {
-                        if (container.id === targetContainerId) {
-                            container.classList.remove('hidden');
-                            if (targetContainerId === 'auth-container' || targetContainerId === 'lock-dialogue-container') {
-                                container.classList.add('visible-flex');
-                            } else if (targetContainerId === 'user-website-container') {
-                                 container.classList.add('visible');
-                            }
-                            const contentBox = container.querySelector('.dialogue-box, .auth-form-wrapper');
-                            if(contentBox && (targetContainerId === 'auth-container' || targetContainerId === 'lock-dialogue-container')) {
-                                contentBox.style.animation = 'none'; void contentBox.offsetWidth; contentBox.style.animation = ''; 
-                            }
-                        } else {
-                            container.classList.add('hidden');
-                            container.classList.remove('visible-flex');
-                            container.classList.remove('visible');
-                        }
-                    }
-                });
-            }
-
-            auth.onAuthStateChanged(async user => {
-                if (appLoaderEl && !appLoaderEl.classList.contains('hidden')) { /* Loader already visible */ } 
-                else if(appLoaderEl) { appLoaderEl.classList.remove('hidden'); }
-                
-                currentUser = user;
-                if (user) {
-                    try {
-                        const userRef = db.ref(`users/${user.uid}`);
-                        const snapshot = await userRef.once('value');
-                        if (!snapshot.exists()) {
-                            await userRef.set({ email: user.email, uid: user.uid, createdAt: firebase.database.ServerValue.TIMESTAMP, banned: false });
-                        } else {
-                            const userData = snapshot.val();
-                            if (userData.banned) {
-                                showModal("Account Restricted", "Your account is banned."); 
-                                await auth.signOut(); return; 
-                            }
-                        }
-                    } catch (error) { 
-                        console.error("DB Error on auth:", error); 
-                        showModal("Error", "Could not verify user data."); 
-                        await auth.signOut(); return;
-                    }
-                } else { 
-                    dialogueAccepted = false; 
-                    sessionStorage.removeItem('tipsEditorDialogueAccepted');
-                }
-                renderAppropriateView();
-            });
-
-            function renderAppropriateView() {
-                if (!currentUser) {
-                    manageContentVisibility('auth-container');
-                    if(userLoginFormComponentEl && userLoginFormComponentEl.innerHTML.trim() === '') buildAuthForms();
-                    if (appLoaderEl) appLoaderEl.classList.add('hidden'); 
-                } else if (!dialogueAccepted) {
-                    if (appLoaderEl) appLoaderEl.classList.remove('hidden'); 
-                    db.ref('lockDialogue').once('value').then(snapshot => {
-                        const data = snapshot.val();
-                        if (data && data.title && data.caption && data.active) {
-                            manageContentVisibility('lock-dialogue-container');
-                            buildLockDialogueContent(data); 
-                        } else {
-                            dialogueAccepted = true; sessionStorage.setItem('tipsEditorDialogueAccepted', 'true');
-                            manageContentVisibility('user-website-container');
-                            if (userEmailDisplayEl) userEmailDisplayEl.textContent = ''; 
-                            fetchPosts();
-                        }
-                         if (appLoaderEl && !(data && data.title && data.caption && data.active && !dialogueAccepted) ) {
-                             if (appLoaderEl) appLoaderEl.classList.add('hidden');
-                        }
-                    }).catch(error => {
-                         console.error("Error fetching lock dialogue:", error);
-                        dialogueAccepted = true; sessionStorage.setItem('tipsEditorDialogueAccepted', 'true');
-                        manageContentVisibility('user-website-container');
-                        if (userEmailDisplayEl) userEmailDisplayEl.textContent = ''; 
-                        fetchPosts();
-                    });
-                } else { 
-                    manageContentVisibility('user-website-container');
-                    if (userEmailDisplayEl) userEmailDisplayEl.textContent = ''; 
-                    fetchPosts();
-                }
-            }
-            
-            function buildLockDialogueContent(data) { 
-                if (!lockDialogueContainerEl) return;
-                lockDialogueContainerEl.innerHTML = `
-                    <div class="dialogue-box"> 
-                        <h2>${data.title}</h2> <p>${data.caption}</p>
-                        <button id="accept-dialogue-btn-js">Enter Site</button>
-                    </div>`;
-                const acceptBtnJS = document.getElementById('accept-dialogue-btn-js');
-                if(acceptBtnJS) acceptBtnJS.addEventListener('click', () => {
-                    dialogueAccepted = true; 
-                    sessionStorage.setItem('tipsEditorDialogueAccepted', 'true');
-                    renderAppropriateView(); 
-                });
-            }
-
-            function buildAuthForms() { 
-                if (!userLoginFormComponentEl || !userSignupFormComponentEl) return;
-                userLoginFormComponentEl.innerHTML = `<h2>User Login</h2><p>Welcome back!</p><form id="login-form-actual"><input type="email" id="login-email" placeholder="Email Address" required><input type="password" id="login-password" placeholder="Password" required><button type="submit">Log In</button></form><p class="toggle-auth mt-1">No account? <a href="#" id="show-signup-link-js">Sign up</a></p>`;
-                userSignupFormComponentEl.innerHTML = `<h2>Create Account</h2><p>Join us!</p><form id="signup-form-actual"><input type="email" id="signup-email" placeholder="Email Address" required><input type="password" id="signup-password" placeholder="Create Password (min. 6)" required><button type="submit">Sign Up</button></form><p class="toggle-auth mt-1">Already have an account? <a href="#" id="show-login-link-js">Login</a></p>`;
-                const loginForm = document.getElementById('login-form-actual');
-                const signupForm = document.getElementById('signup-form-actual');
-                const showSignupLinkJS = document.getElementById('show-signup-link-js');
-                const showLoginLinkJS = document.getElementById('show-login-link-js');
-                if(loginForm) loginForm.addEventListener('submit', e => { /* ... */ });
-                if(signupForm) signupForm.addEventListener('submit', e => { /* ... */ });
-                if(showSignupLinkJS) showSignupLinkJS.addEventListener('click', e => { /* ... */ });
-                if(showLoginLinkJS) showLoginLinkJS.addEventListener('click', e => { /* ... */ });
-                 if(loginForm) loginForm.addEventListener('submit', e => { 
-                    e.preventDefault(); if(appLoaderEl) appLoaderEl.classList.remove('hidden');
-                    const emailVal = document.getElementById('login-email').value;
-                    const passwordVal = document.getElementById('login-password').value;
-                    auth.signInWithEmailAndPassword(emailVal, passwordVal)
-                        .catch(error => { 
-                            showModal("Login Error", error.message); 
-                            if(appLoaderEl) appLoaderEl.classList.add('hidden'); 
-                        });
-                });
-                if(signupForm) signupForm.addEventListener('submit', e => { 
-                    e.preventDefault(); if(appLoaderEl) appLoaderEl.classList.remove('hidden');
-                    const emailVal = document.getElementById('signup-email').value;
-                    const passwordVal = document.getElementById('signup-password').value;
-                    auth.createUserWithEmailAndPassword(emailVal, passwordVal)
-                        .catch(error => { 
-                            showModal("Signup Error", error.message); 
-                            if(appLoaderEl) appLoaderEl.classList.add('hidden');
-                        });
-                });
-                if(showSignupLinkJS) showSignupLinkJS.addEventListener('click', e => { e.preventDefault(); userLoginFormComponentEl.classList.add('hidden'); userSignupFormComponentEl.classList.remove('hidden'); });
-                if(showLoginLinkJS) showLoginLinkJS.addEventListener('click', e => { e.preventDefault(); userSignupFormComponentEl.classList.add('hidden'); userLoginFormComponentEl.classList.remove('hidden'); });
-            }
-
-            function showPostDetailsModal(postData) {
-                if (!postData || !postDetailTitleEl || !postDetailDescriptionEl || !postDetailDownloadLinkEl || !postDetailThumbnailEl) {
-                    return;
-                }
-                postDetailTitleEl.textContent = postData.title || "No Title";
-                postDetailDescriptionEl.innerHTML = postData.description ? postData.description.replace(/\n/g, '<br>') : "No description available.";
-                if (postData.thumbnailUrl && postData.thumbnailUrl.trim() !== "") {
-                    postDetailThumbnailEl.src = postData.thumbnailUrl;
-                    postDetailThumbnailEl.alt = postData.title || "Post Thumbnail";
-                    postDetailThumbnailEl.style.display = 'block';
-                } else {
-                    postDetailThumbnailEl.style.display = 'none';
-                }
-                if (postData.downloadLink && postData.downloadLink.trim() !== "") {
-                    postDetailDownloadLinkEl.href = postData.downloadLink;
-                    postDetailDownloadLinkEl.style.display = 'block';
-                    postDetailDownloadLinkEl.removeAttribute('disabled');
-                    postDetailDownloadLinkEl.textContent = "Download Materials";
-                } else {
-                    postDetailDownloadLinkEl.href = '#';
-                    postDetailDownloadLinkEl.style.display = 'block';
-                    postDetailDownloadLinkEl.setAttribute('disabled', 'true');
-                    postDetailDownloadLinkEl.textContent = "Download Not Available";
-                }
-                showModal(); 
-            }
-
-            function fetchPosts() {
-                if(!postsGridEl) { if(appLoaderEl) appLoaderEl.classList.add('hidden'); return; }
-                postsGridEl.innerHTML = `<div class="spinner-wrapper" style="grid-column: 1/-1; display:flex; justify-content:center; padding:40px;"><div class="spinner"></div><p class="state-message" style="margin-left:10px;">Fetching materials...</p></div>`;
-                
-                db.ref('posts').orderByChild('createdAt').on('value', snapshot => {
-                    if(postsGridEl) postsGridEl.innerHTML = ''; 
-                    const posts = snapshot.val();
-                    let cardIndex = 0;
-                    if (posts && Object.keys(posts).length > 0) {
-                        const sortedPosts = Object.entries(posts).sort(([,a],[,b]) => (b.createdAt || 0) - (a.createdAt || 0)); 
-                        for (const [key, post] of sortedPosts) { 
-                            const postElement = document.createElement('div'); 
-                            postElement.classList.add('post-card');
-                            postElement.style.animationDelay = `${cardIndex * 0.07}s`; 
-                            cardIndex++;
-                            postElement.innerHTML = `
-                                <div class="post-thumbnail-wrapper"><img src="${post.thumbnailUrl || 'https://via.placeholder.com/300x220?text=No+Image'}" alt="${post.title || 'Thumbnail'}" class="post-thumbnail" onerror="this.src='https://via.placeholder.com/300x220?text=Error'"></div>
-                                <div class="post-content">
-                                    <h3 class="post-title">${post.title || 'Untitled'}</h3>
-                                    <p class="post-description">${(post.description || '').substring(0, 100)}${post.description && post.description.length > 100 ? '...' : ''}</p>
-                                    <button class="download-button view-details-btn">View Details</button> 
-                                </div>`;
-                            
-                            const viewDetailsButton = postElement.querySelector('.view-details-btn');
-                            if (viewDetailsButton) {
-                                viewDetailsButton.addEventListener('click', (e) => {
-                                    e.stopPropagation(); 
-                                    showPostDetailsModal(post); 
-                                });
-                            }
-                            if(postsGridEl) postsGridEl.appendChild(postElement);
-                        }
-                    } else {
-                        if(postsGridEl) postsGridEl.innerHTML = '<p class="no-posts">No materials uploaded yet.</p>';
-                    }
-                    if (appLoaderEl) appLoaderEl.classList.add('hidden'); 
-                }, error => {
-                    console.error("Error fetching posts:", error);
-                    if(postsGridEl) postsGridEl.innerHTML = '<p class="no-posts">Could not load materials.</p>'; 
-                    if (appLoaderEl) appLoaderEl.classList.add('hidden'); 
-                });
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                initDOMElements(); 
-                applySavedTheme(); 
-                if(logoutButtonEl) logoutButtonEl.addEventListener('click', () => {
-                    if (appLoaderEl) appLoaderEl.classList.remove('hidden'); 
-                    auth.signOut();
-                });
-                if(themeToggleButtonEl) themeToggleButtonEl.addEventListener('click', toggleTheme);
-            });
-        } 
+        }, 1000);
     </script>
+
 </body>
 </html>
